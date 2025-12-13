@@ -1,7 +1,6 @@
 
 
 import React, { useEffect, useMemo, useState } from "react";
-import "./ProductDashboard.css";
 
 /* ---------------- IMAGE IMPORTS ----------------
    Make sure these exact files exist in src/assets/images/
@@ -105,10 +104,11 @@ function ProductCard({ product, onEdit, theme }) {
   const goTo = (i) => setIndex(i);
 
   return (
-    <article className={`pd-card ${theme === "dark" ? "pd-card--dark" : ""}`}>
-      <div className="pd-thumb">
+    <article className={`bg-white dark:bg-slate-800 rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg border border-gray-200 dark:border-slate-700 ${theme === "dark" ? "dark:bg-slate-800" : ""
+      }`}>
+      <div className="relative bg-gray-200 dark:bg-slate-700 w-full h-60 overflow-hidden">
         <img
-          className="pd-main-img"
+          className="w-full h-full object-cover"
           src={imgs[index]}
           alt={`${product.name} ${index + 1}`}
           onError={(e) => (e.currentTarget.src = placeholder)}
@@ -116,24 +116,28 @@ function ProductCard({ product, onEdit, theme }) {
 
         {imgs.length > 1 && (
           <>
-            <button className="pd-arrow pd-left" onClick={prev} aria-label="Previous image">‹</button>
-            <button className="pd-arrow pd-right" onClick={next} aria-label="Next image">›</button>
+            <button className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white text-xl px-2 py-1 rounded transition" onClick={prev} aria-label="Previous image">‹</button>
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white text-xl px-2 py-1 rounded transition" onClick={next} aria-label="Next image">›</button>
           </>
         )}
 
-        <div className="pd-counter">{index + 1} / {imgs.length}</div>
+        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">{index + 1} / {imgs.length}</div>
 
-        <div className={`pd-badge ${product.stock ? "in" : "out"}`}>
+        <div className={`absolute top-2 right-2 px-3 py-1 rounded text-sm font-semibold ${product.stock
+          ? "bg-green-500 text-white"
+          : "bg-red-500 text-white"
+          }`}>
           {product.stock ? "In Stock" : "Out of Stock"}
         </div>
       </div>
 
-      <div className="pd-thumbs">
+      <div className="flex gap-1 p-2 bg-gray-100 dark:bg-slate-700 overflow-x-auto">
         {imgs.map((s, i) => (
           <img
             key={i}
             src={s}
-            className={`pd-thumb-item ${i === index ? "active" : ""}`}
+            className={`w-12 h-12 object-cover rounded cursor-pointer transition ${i === index ? "ring-2 ring-teal-500" : "opacity-60 hover:opacity-100"
+              }`}
             onClick={() => goTo(i)}
             alt={`thumb ${i + 1}`}
             onError={(e) => (e.currentTarget.src = placeholder)}
@@ -141,22 +145,22 @@ function ProductCard({ product, onEdit, theme }) {
         ))}
       </div>
 
-      <div className="pd-body">
-        <div className="pd-row">
-          <h3 className="pd-name">{product.name}</h3>
-          <div className="pd-price">₹{Number(product.price).toLocaleString()}</div>
+      <div className="p-4">
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">{product.name}</h3>
+          <div className="text-xl font-bold text-teal-600">₹{Number(product.price).toLocaleString()}</div>
         </div>
 
-        <div className="pd-meta">
+        <div className="space-y-1 mb-3 text-sm text-gray-600 dark:text-gray-400">
           <div><strong>Age:</strong> {product.age}</div>
           <div><strong>Location:</strong> {product.location}</div>
           <div><strong>ID:</strong> {product.id}</div>
         </div>
 
-        <p className="pd-desc">{product.description}</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-2">{product.description}</p>
 
-        <div className="pd-actions">
-          <button className="pd-edit" onClick={() => onEdit(product)}>✏️ Edit</button>
+        <div className="flex gap-2">
+          <button className="btn-primary flex-1" onClick={() => onEdit(product)}>✏️ Edit</button>
         </div>
       </div>
     </article>
@@ -276,27 +280,33 @@ export default function ProductDashboard({ onBack }) {
   }, [totalPages, page]);
 
   return (
-    <div className={`pd-root ${theme === "dark" ? "theme-dark" : "theme-light"}`}>
-      <header className="pd-header">
-        <div className="pd-left">
-          {onBack && <button className="pd-back" onClick={onBack}>← Back</button>}
-          <div>
-            <div className="pd-title">Markwave — Products</div>
-            {/* <div className="pd-sub"></div> */}
+    <div className={`min-h-screen ${theme === "dark" ? "bg-slate-900" : "bg-gray-50"}`}>
+      <header className="bg-white dark:bg-slate-800 shadow-sm border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-4">
+            {onBack && (
+              <button
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-semibold transition"
+                onClick={onBack}
+              >
+                ← Back
+              </button>
+            )}
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Markwave — Products</h1>
+            </div>
           </div>
-        </div>
 
-        <div className="pd-right">
-          <div className="pd-controls">
+          <div className="flex items-center gap-3 flex-wrap">
             <input
-              className="pd-search"
+              className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 w-64"
               placeholder="Search name, location, or id..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(0); }}
             />
 
             <select
-              className="pd-select"
+              className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
               value={stockFilter}
               onChange={(e) => { setStockFilter(e.target.value); setPage(0); }}
             >
@@ -305,11 +315,11 @@ export default function ProductDashboard({ onBack }) {
               <option value="out">Out of Stock</option>
             </select>
 
-            <button className="pd-add" onClick={addNewProduct}>+ Add</button>
+            <button className="btn-primary" onClick={addNewProduct}>+ Add</button>
 
             {/* THEME TOGGLE */}
             <button
-              className="pd-theme-toggle"
+              className="text-2xl p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition"
               onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
               title="Toggle theme"
             >
@@ -319,11 +329,13 @@ export default function ProductDashboard({ onBack }) {
         </div>
       </header>
 
-      <main className="pd-main">
-        <section className="pd-section">
-          <div className="pd-grid">
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        <section>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {paged.length === 0 ? (
-              <div className="pd-empty">No products found</div>
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500 dark:text-gray-400 text-lg">No products found</p>
+              </div>
             ) : (
               paged.map((p) => (
                 <ProductCard key={p.id} product={p} onEdit={openEdit} theme={theme} />
@@ -331,96 +343,198 @@ export default function ProductDashboard({ onBack }) {
             )}
           </div>
 
-          <div className="pd-pagination">
-            <button className="pd-page-btn" onClick={() => setPage((x) => Math.max(0, x - 1))} disabled={page === 0}>← Previous</button>
-            <div className="pd-page-status">Page {page + 1} of {totalPages}</div>
-            <button className="pd-page-btn" onClick={() => setPage((x) => Math.min(totalPages - 1, x + 1))} disabled={page === totalPages - 1}>Next →</button>
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <button
+              className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+              onClick={() => setPage((x) => Math.max(0, x - 1))}
+              disabled={page === 0}
+            >
+              ← Previous
+            </button>
+            <div className="text-gray-700 dark:text-gray-300 font-semibold">Page {page + 1} of {totalPages}</div>
+            <button
+              className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+              onClick={() => setPage((x) => Math.min(totalPages - 1, x + 1))}
+              disabled={page === totalPages - 1}
+            >
+              Next →
+            </button>
           </div>
         </section>
       </main>
 
       {/* EDIT MODAL */}
       {modalOpen && editingProduct && (
-        <div className="pd-modal-backdrop" onMouseDown={closeModal}>
-          <div className="pd-modal" onMouseDown={(e) => e.stopPropagation()}>
-            <h3>Edit product</h3>
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onMouseDown={closeModal}>
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 p-6 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Edit product</h3>
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl"
+              >
+                ✕
+              </button>
+            </div>
 
-            <form className="pd-form" onSubmit={(e) => { e.preventDefault(); saveEdits(e); }}>
-              <div className="pd-row-two">
-                <label>
-                  Name
-                  <input value={editingProduct.name} onChange={(e) => setEditingProduct((p) => ({ ...p, name: e.target.value }))} required />
-                </label>
+            <form className="p-6 space-y-4" onSubmit={(e) => { e.preventDefault(); saveEdits(e); }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Name</label>
+                  <input
+                    value={editingProduct.name}
+                    onChange={(e) => setEditingProduct((p) => ({ ...p, name: e.target.value }))}
+                    required
+                    className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                </div>
 
-                <label>
-                  Age
-                  <input value={editingProduct.age} onChange={(e) => setEditingProduct((p) => ({ ...p, age: e.target.value }))} />
-                </label>
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Age</label>
+                  <input
+                    value={editingProduct.age}
+                    onChange={(e) => setEditingProduct((p) => ({ ...p, age: e.target.value }))}
+                    className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                </div>
               </div>
 
-              <label>
-                Location
-                <input value={editingProduct.location} onChange={(e) => setEditingProduct((p) => ({ ...p, location: e.target.value }))} />
-              </label>
-
-              <div className="pd-row-two">
-                <label>
-                  Price (₹)
-                  <input type="number" value={editingProduct.price} onChange={(e) => setEditingProduct((p) => ({ ...p, price: Number(e.target.value) }))} />
-                </label>
-
-                <label>
-                  Insurance (₹)
-                  <input type="number" value={editingProduct.insurance} onChange={(e) => setEditingProduct((p) => ({ ...p, insurance: Number(e.target.value) }))} />
-                </label>
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Location</label>
+                <input
+                  value={editingProduct.location}
+                  onChange={(e) => setEditingProduct((p) => ({ ...p, location: e.target.value }))}
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
               </div>
 
-              <label>
-                Stock
-                <select value={editingProduct.stock ? "true" : "false"} onChange={(e) => setEditingProduct((p) => ({ ...p, stock: e.target.value === "true" }))}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Price (₹)</label>
+                  <input
+                    type="number"
+                    value={editingProduct.price}
+                    onChange={(e) => setEditingProduct((p) => ({ ...p, price: Number(e.target.value) }))}
+                    className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Insurance (₹)</label>
+                  <input
+                    type="number"
+                    value={editingProduct.insurance}
+                    onChange={(e) => setEditingProduct((p) => ({ ...p, insurance: Number(e.target.value) }))}
+                    className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Stock</label>
+                <select
+                  value={editingProduct.stock ? "true" : "false"}
+                  onChange={(e) => setEditingProduct((p) => ({ ...p, stock: e.target.value === "true" }))}
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                >
                   <option value="true">In Stock</option>
                   <option value="false">Out of Stock</option>
                 </select>
-              </label>
+              </div>
 
-              {/* Description (large textarea) */}
-              <label>
-                Description
-                <textarea className="pd-desc-area" value={editingProduct.description} onChange={(e) => setEditingProduct((p) => ({ ...p, description: e.target.value }))} />
-              </label>
+              {/* Description */}
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                <textarea
+                  value={editingProduct.description}
+                  onChange={(e) => setEditingProduct((p) => ({ ...p, description: e.target.value }))}
+                  rows={4}
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                />
+              </div>
 
               {/* IMAGE MANAGER */}
-              <div className="pd-images-manager">
-                <div className="pd-images-header">Images ({(editingProduct.images || []).length})</div>
+              <div className="border-t border-gray-200 dark:border-slate-700 pt-4 mt-4">
+                <div className="font-bold text-gray-900 dark:text-white mb-3">Images ({(editingProduct.images || []).length})</div>
 
-                <div className="pd-add-row">
-                  <input placeholder="Paste image URL or local filename (e.g. m1.png)" value={newImageInput} onChange={(e) => setNewImageInput(e.target.value)} />
-                  <button type="button" onClick={addImageByURL}>Add URL</button>
-                  <label className="pd-upload">
+                <div className="flex gap-2 mb-4 flex-wrap">
+                  <input
+                    placeholder="Paste image URL or local filename (e.g. m1.png)"
+                    value={newImageInput}
+                    onChange={(e) => setNewImageInput(e.target.value)}
+                    className="flex-1 min-w-40 px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={addImageByURL}
+                    className="btn-primary"
+                  >
+                    Add URL
+                  </button>
+                  <label className="btn-secondary cursor-pointer">
                     Upload
-                    <input type="file" accept="image/*" onChange={handleFileUpload} />
+                    <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
                   </label>
                 </div>
 
-                <div className="pd-images-list">
-                  {(editingProduct.images || []).length === 0 && <div className="pd-no-img">No images yet</div>}
+                <div className="grid grid-cols-3 gap-3">
+                  {(editingProduct.images || []).length === 0 && (
+                    <div className="col-span-3 text-center py-6 text-gray-500 dark:text-gray-400">No images yet</div>
+                  )}
                   {(editingProduct.images || []).map((src, i) => (
-                    <div className="pd-img-chip" key={i}>
-                      <img src={src} alt={`img-${i}`} onError={(e) => (e.currentTarget.src = placeholder)} />
-                      <div className="pd-img-actions">
-                        <button type="button" onClick={() => moveImage(i, -1)} disabled={i === 0}>◀</button>
-                        <button type="button" onClick={() => moveImage(i, +1)} disabled={i === editingProduct.images.length - 1}>▶</button>
-                        <button type="button" onClick={() => deleteImageAt(i)}>🗑</button>
+                    <div className="relative bg-gray-200 dark:bg-slate-700 rounded-lg overflow-hidden group" key={i}>
+                      <img
+                        src={src}
+                        alt={`img-${i}`}
+                        className="w-full h-24 object-cover"
+                        onError={(e) => (e.currentTarget.src = placeholder)}
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-1 transition">
+                        <button
+                          type="button"
+                          onClick={() => moveImage(i, -1)}
+                          disabled={i === 0}
+                          className="p-1 bg-gray-700 hover:bg-gray-800 disabled:bg-gray-500 text-white rounded"
+                        >
+                          ◀
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveImage(i, +1)}
+                          disabled={i === editingProduct.images.length - 1}
+                          className="p-1 bg-gray-700 hover:bg-gray-800 disabled:bg-gray-500 text-white rounded"
+                        >
+                          ▶
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteImageAt(i)}
+                          className="p-1 bg-red-600 hover:bg-red-700 text-white rounded"
+                        >
+                          🗑
+                        </button>
                       </div>
-                      <div className="pd-img-name">{String(src).split("/").pop()}</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 truncate px-2 py-1">{String(src).split("/").pop()}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pd-form-actions">
-                <button type="button" className="pd-cancel" onClick={closeModal}>Cancel</button>
-                <button type="button" className="pd-save" onClick={saveEdits}>Save Changes</button>
+              <div className="flex gap-3 justify-end border-t border-gray-200 dark:border-slate-700 pt-4 mt-6">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-semibold transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={saveEdits}
+                  className="btn-primary"
+                >
+                  Save Changes
+                </button>
               </div>
             </form>
           </div>

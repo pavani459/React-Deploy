@@ -1,115 +1,5 @@
 
-
 import React, { useState } from "react";
-
-const styles = {
-    layout: {
-        display: "flex",
-        minHeight: "100vh",
-        width: "100%",
-        fontFamily: "Inter, system-ui, sans-serif",
-    },
-    background: {
-        flex: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.6), rgba(153, 49, 49, 0.6), rgba(30,64,175,0.6)), url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1500&q=80')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        padding: 20,
-    },
-    sidebar: {
-        width: 260,
-        background: "rgba(255,255,255,0.9)",
-        backdropFilter: "blur(8px)",
-        padding: "40px 20px",
-        boxShadow: "4px 0 20px rgba(0,0,0,0.1)",
-        display: "flex",
-        flexDirection: "column",
-        gap: 20,
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center"
-    },
-    sidebarTitle: {
-        fontSize: 26,
-        fontWeight: 700,
-        color: "#1f2937",
-        textAlign: "center",
-    },
-    sidebarDesc: {
-        fontSize: 15,
-        color: "#4b5563",
-        textAlign: "center",
-        lineHeight: 1.7,
-        padding: "0 8px",
-    },
-    card: {
-        maxWidth: 420,
-        width: "100%",
-        padding: "40px 30px",
-        borderRadius: 12,
-        boxShadow: "0 20px 80px rgba(0, 0, 0, 0.5)",
-        backgroundColor: "#ffffff",
-    },
-    heading: {
-        fontSize: 28,
-        color: "#1f2937",
-        textAlign: "center",
-        fontWeight: 700,
-        marginBottom: 10,
-    },
-    subHeading: {
-        fontSize: 14,
-        color: "#6b7280",
-        textAlign: "center",
-        marginBottom: 30,
-    },
-    label: {
-        display: "block",
-        marginBottom: 8,
-        fontSize: 14,
-        color: "#374151",
-        fontWeight: "600",
-    },
-    input: {
-        width: "100%",
-        padding: "10px 12px",
-        borderRadius: 8,
-        border: "1px solid #d1d5db",
-        fontSize: 14,
-        boxSizing: "border-box",
-        marginBottom: 16,
-    },
-    button: {
-        width: "100%",
-        padding: "12px",
-        borderRadius: 8,
-        background: "#3b82f6",
-        color: "#fff",
-        border: "none",
-        cursor: "pointer",
-        fontSize: 16,
-        fontWeight: "bold",
-        transition: "0.3s ease",
-        marginTop: 10,
-    },
-    error: {
-        color: "#ef4444",
-        marginTop: 15,
-        textAlign: "center",
-        fontSize: 14,
-    },
-    success: {
-        color: "#10b981",
-        marginTop: 15,
-        textAlign: "center",
-        fontSize: 14,
-    },
-};
 
 function Loginpage({ onLogin }) {
     const [username, setUsername] = useState("");
@@ -128,7 +18,7 @@ function Loginpage({ onLogin }) {
             return;
         }
 
-        if (username === "superadmin" && password === "superadmin@2025") {
+        if (username === "superadmin" && password === "superadmin@20205") {
             localStorage.setItem("isAuthenticated", "true");
             localStorage.setItem("role", "superadmin");
             onLogin("superadmin");
@@ -139,30 +29,48 @@ function Loginpage({ onLogin }) {
     };
 
     return (
-        <div style={styles.layout}>
+        <div className="flex min-h-screen w-full font-sans">
 
-            <aside style={styles.sidebar}>
-                <h2 style={styles.sidebarTitle}>Welcome to Markwave</h2>
-                <p style={styles.sidebarDesc}>
+            <aside className="w-64 bg-white/90 backdrop-blur-lg shadow-lg flex flex-col gap-5 justify-center items-center text-center p-10">
+                <h2 className="text-3xl font-bold text-gray-900">Welcome to Markwave</h2>
+                <p className="text-gray-600 leading-relaxed text-sm">
                     Sign in to access your Markwave dashboard.
                 </p>
             </aside>
 
-            <div style={styles.background}>
-                <div style={styles.card}>
-                    <h2 style={styles.heading}>Markwave</h2>
-                    <p style={styles.subHeading}>Sign in to your account</p>
+            <div className="flex-1 flex justify-center items-center bg-cover bg-center bg-fixed p-5"
+                style={{
+                    backgroundImage: "linear-gradient(rgba(0,0,0,0.6), rgba(153, 49, 49, 0.6), rgba(30,64,175,0.6)), url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1500&q=80')"
+                }}>
+                <div className="max-w-sm w-full bg-white rounded-xl shadow-2xl p-10">
+                    <h2 className="text-3xl font-bold text-gray-900 text-center mb-2">Markwave</h2>
+                    <p className="text-gray-600 text-center mb-8">Sign in to your account</p>
 
                     <form onSubmit={handleSubmit}>
-                        <label style={styles.label}>Username</label>
-                        <input style={styles.input} value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <label className="block mb-2 text-sm font-semibold text-gray-700">Username</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                        />
 
-                        <label style={styles.label}>Password</label>
-                        <input type="password" style={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <label className="block mb-2 text-sm font-semibold text-gray-700">Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-3 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
+                        />
 
-                        <button type="submit" style={styles.button}>Sign In</button>
+                        <button
+                            type="submit"
+                            className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-base transition duration-300 mt-2"
+                        >
+                            Sign In
+                        </button>
 
-                        {error && <div style={styles.error}>{error}</div>}
+                        {error && <div className="text-red-500 text-center text-sm mt-4">{error}</div>}
                     </form>
                 </div>
             </div>

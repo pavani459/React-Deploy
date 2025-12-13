@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 
-export default function ReferralDashboard({ onLogout, onNavigate }) {
+export default function ReferralDashboard({ onLogout, onNavigate, userRole }) {
   /* ---------------------- CONSTANTS ---------------------- */
   const NEW_REFERRED_BY_NAME = "pavani";
   const NEW_REFERRED_BY_MOBILE = "9347163592";
@@ -93,12 +93,12 @@ export default function ReferralDashboard({ onLogout, onNavigate }) {
         prev.map((r) =>
           r.id === editingId
             ? {
-                ...r,
-                alternateMobile: form.alternateMobile,
-                dateOfBirth: form.dateOfBirth,
-                adharNo: form.adharNo,
-                name: `${form.firstName} ${form.lastName}`,
-              }
+              ...r,
+              alternateMobile: form.alternateMobile,
+              dateOfBirth: form.dateOfBirth,
+              adharNo: form.adharNo,
+              name: `${form.firstName} ${form.lastName}`,
+            }
             : r
         )
       );
@@ -279,70 +279,52 @@ export default function ReferralDashboard({ onLogout, onNavigate }) {
       }}
     >
       {/* SIDEBAR */}
-      <aside
-        style={{
-          width: 250,
-          ...card,
-          height: "95vh",
-          position: "sticky",
-          top: 20,
-        }}
-      >
-        <h2
-          style={{
-            marginBottom: 25,
-            color: theme.primary,
-            textAlign: "center",
-          }}
-        >
+      <aside className="w-64 bg-white dark:bg-slate-800 p-5 rounded-lg shadow-md border border-gray-200 dark:border-slate-700 h-[95vh] sticky top-5 flex flex-col">
+        <h2 className="text-2xl font-bold text-teal-600 text-center mb-6">
           Markwave
         </h2>
 
         <button
           onClick={() => setActivePage("referral")}
-          style={{
-            ...buttonPrimary,
-            background: activePage === "referral" ? theme.primary : theme.soft,
-            color: activePage === "referral" ? "#fff" : theme.text,
-            width: "100%",
-            marginBottom: 10,
-          }}
+          className={`w-full py-2.5 px-4 rounded-lg font-semibold mb-3 transition-all ${activePage === "referral"
+            ? "bg-teal-600 text-white"
+            : "bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-600"
+            }`}
         >
           Referrals
         </button>
 
         <button
           onClick={() => setActivePage("verified")}
-          style={{
-            ...buttonPrimary,
-            background: activePage === "verified" ? theme.primary : theme.soft,
-            color: activePage === "verified" ? "#fff" : theme.text,
-            width: "100%",
-            marginBottom: 10,
-          }}
+          className={`w-full py-2.5 px-4 rounded-lg font-semibold mb-3 transition-all ${activePage === "verified"
+            ? "bg-teal-600 text-white"
+            : "bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-600"
+            }`}
         >
           Verified Users
         </button>
 
         <button
           onClick={() => {
-            if (typeof onNavigate === "function") onNavigate("products");
-            else setActivePage("products");
+            if (userRole === "superadmin") {
+              if (typeof onNavigate === "function") onNavigate("products");
+              else setActivePage("products");
+            }
           }}
-          style={{
-            ...buttonPrimary,
-            background: theme.accent,
-            width: "100%",
-            marginTop: 5,
-          }}
+          disabled={userRole !== "superadmin"}
+          className={`w-full py-2.5 px-4 rounded-lg font-semibold mt-1 transition-all ${userRole === "superadmin"
+              ? "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
+              : "bg-gray-200 dark:bg-slate-600 text-gray-500 dark:text-gray-400 cursor-not-allowed opacity-50"
+            }`}
+          title={userRole !== "superadmin" ? "Only SuperAdmin can access Products" : ""}
         >
           Products
         </button>
 
-        <div style={{ marginTop: "auto" }}>
+        <div className="mt-auto">
           <button
             onClick={onLogout}
-            style={{ ...buttonPrimary, width: "100%" }}
+            className="btn-primary w-full"
           >
             Logout
           </button>
@@ -352,42 +334,32 @@ export default function ReferralDashboard({ onLogout, onNavigate }) {
       {/* MAIN */}
       <main style={{ flex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
         {/* TOP NAVBAR */}
-        <div
-          style={{
-            position: "sticky",
-            top: 10,
-            background: theme.card,
-            padding: "12px 16px",
-            borderRadius: 12,
-            boxShadow: "0 6px 18px rgba(0,0,0,0.04)",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
-          <h1 style={{ margin: 0 }}>Referral Dashboard</h1>
+        <div className="sticky top-2.5 nav-bar z-10">
+          <h1 className="text-2xl font-bold m-0 whitespace-nowrap">Referral Dashboard</h1>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div className="flex items-center gap-3 flex-1 justify-end flex-wrap">
             <input
               placeholder="Search..."
-              style={{ ...input, width: 220 }}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 w-48"
             />
 
-            <button onClick={() => setDarkMode((d) => !d)} style={buttonPrimary}>
-              {darkMode ? "☀" : "🌙"}
+            <button
+              onClick={() => setDarkMode((d) => !d)}
+              className="btn-primary whitespace-nowrap"
+            >
+              {darkMode ? "☀️" : "🌙"}
             </button>
           </div>
         </div>
 
         {/* SORT + ADD REFERRAL */}
-        <div style={{ display: "flex", gap: 10 }}>
+        <div className="flex items-center gap-3 flex-wrap">
           <select
-            style={{ ...input, width: 200 }}
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 w-56"
           >
             <option value="latest">Sort: Latest</option>
             <option value="name">Sort: Name</option>
@@ -395,12 +367,12 @@ export default function ReferralDashboard({ onLogout, onNavigate }) {
           </select>
 
           <button
-            style={buttonPrimary}
             onClick={() => {
               setShowForm(!showForm);
               setForm(emptyForm);
               setEditingId(null);
             }}
+            className="btn-primary"
           >
             {showForm ? "Cancel" : "Add Referral"}
           </button>
@@ -408,84 +380,80 @@ export default function ReferralDashboard({ onLogout, onNavigate }) {
 
         {/* REFERRAL FORM */}
         {showForm && (
-          <div style={card}>
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-slate-700">
             <form
               onSubmit={handleSubmit}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: 15,
-              }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
             >
-              <div>
-                <label>First Name</label>
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">First Name</label>
                 <input
                   name="firstName"
-                  style={input}
                   value={form.firstName}
                   onChange={handleChange}
                   required
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
-              <div>
-                <label>Last Name</label>
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Last Name</label>
                 <input
                   name="lastName"
-                  style={input}
                   value={form.lastName}
                   onChange={handleChange}
                   required
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
-              <div>
-                <label>Mobile</label>
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Mobile</label>
                 <input
                   name="mobile"
-                  style={input}
                   value={form.mobile}
                   onChange={editingId ? undefined : handleChange}
                   readOnly={editingId ? true : false}
                   required
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:bg-gray-100 dark:disabled:bg-slate-600"
                 />
               </div>
 
-              <div>
-                <label>Alternate Number</label>
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Alternate Number</label>
                 <input
                   name="alternateMobile"
-                  style={input}
                   value={form.alternateMobile}
                   onChange={handleChange}
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
-              <div>
-                <label>DOB</label>
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">DOB</label>
                 <input
                   type="date"
                   name="dateOfBirth"
-                  style={input}
                   value={form.dateOfBirth}
                   onChange={handleChange}
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
-              <div>
-                <label>Aadhar</label>
+              <div className="flex flex-col">
+                <label className="font-semibold text-gray-700 dark:text-gray-300 mb-2">Aadhar</label>
                 <input
                   name="adharNo"
                   maxLength={12}
-                  style={input}
                   value={form.adharNo}
                   onChange={handleChange}
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:bg-slate-700 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
               <button
                 type="submit"
-                style={{ ...buttonPrimary, gridColumn: "1 / -1" }}
+                className="btn-primary col-span-full"
               >
                 {editingId ? "Save Changes" : "Submit"}
               </button>

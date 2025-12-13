@@ -46,11 +46,13 @@ function App() {
             <ReferralDashboard
               onLogout={handleLogout}
               onNavigate={(v) => setActiveView(v)}
+              userRole={role}
             />
           ) : activeView === "referrals" ? (
             <ReferralDashboard
               onLogout={handleLogout}
               onNavigate={(v) => setActiveView(v)}
+              userRole={role}
             />
           ) : (
             <ProductDashboard onBack={() => setActiveView("referrals")} />
