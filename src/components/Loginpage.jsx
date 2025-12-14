@@ -18,7 +18,7 @@ function Loginpage({ onLogin }) {
             return;
         }
 
-        if (username === "superadmin" && password === "superadmin@20205") {
+        if (username === "superadmin" && password === "superadmin@2025") {
             localStorage.setItem("isAuthenticated", "true");
             localStorage.setItem("role", "superadmin");
             onLogin("superadmin");
