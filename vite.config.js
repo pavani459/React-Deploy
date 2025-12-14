@@ -6,10 +6,20 @@
 //   plugins: [react()],
 // })
 
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// import { defineConfig } from 'vite'
+// import react from '@vitejs/plugin-react'
+
+// export default defineConfig({
+//   plugins: [react()],
+//   base: '/Buffaloes/',   // IMPORTANT for GitHub Pages
+// })
+
+
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Buffaloes/',   // IMPORTANT for GitHub Pages
-})
+  base: "/Task-Deploy/"
+});
+
